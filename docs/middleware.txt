@@ -1,0 +1,14 @@
+#morgan("dev"):
+- Morgan là một middleware dùng để log các request HTTP trong Node.js.
+- Khi sử dụng morgan("dev"), nó sẽ ghi lại các thông tin về request HTTP theo định dạng 'dev' (dành cho phát triển), bao gồm phương thức HTTP, URL, trạng thái, thời gian phản hồi và kích thước phản hồi.
+- Giúp theo dõi và ghi lại chi tiết các request, hữu ích cho việc phát hiện và gỡ lỗi.
+
+#helmet
+- Helmet là một tập hợp các middleware giúp bảo vệ ứng dụng Node.js bằng cách thiết lập các header HTTP thích hợp.
+- Mặc định, Helmet bao gồm nhiều middleware nhỏ như helmet.contentSecurityPolicy, helmet.dnsPrefetchControl, helmet.frameguard, helmet.hidePoweredBy, helmet.hsts, helmet.ieNoOpen, helmet.noSniff, helmet.permittedCrossDomainPolicies, và helmet.xssFilter.
+- Giúp tăng cường bảo mật cho ứng dụng bằng cách ngăn chặn một số lỗ hổng bảo mật thông qua việc cấu hình các header HTTP.
+
+#compression
+- Compression là một middleware dùng để nén các phản hồi HTTP.
+- Khi sử dụng compression(), nội dung phản hồi được nén lại trước khi gửi về phía client, giảm dung lượng của phản hồi.
+- Giúp cải thiện hiệu suất của ứng dụng bằng cách giảm băng thông tiêu thụ và tăng tốc độ tải trang.
