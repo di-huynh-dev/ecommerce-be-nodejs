@@ -1,0 +1,17 @@
+Giới thiệu về 7 điều nên làm khi triển khai Connect MongoDB to Node.js 
+ Điều 1: Nhược điểm của cách cũ khi connect...
+ Điều 2: Cách mới để connect mongodb thay cho cũ...
+ Điều 3: Cách kiểm tra bao nhiêu connect trong hệ thống code...
+ Điều 4: Kiểm tra hệ thống quá tải connect...
+ Điều 5: Có nên disConnect() liên tục?
+ Điều 6: PoolSize là gì? Và ưu điểm
+ Pool size là số lượng kết nối tối đa có thể được duy trì đồng thời trong một connection pool. Connection pool là một tập hợp các kết nối cơ sở dữ liệu được duy trì để sử dụng lại thay vì tạo và hủy kết nối mỗi khi có một yêu cầu mới. Kích thước của connection pool (pool size) là số lượng kết nối tối đa mà pool có thể quản lý.
+    Ưu điểm của việc sử dụng connection pool và việc xác định pool size hợp lý:
+    - Hiệu suất cao hơn:
+    - Giảm chi phí tạo kết nối: Tạo một kết nối đến cơ sở dữ liệu thường tốn thời gian và tài nguyên. Bằng cách tái sử dụng các kết nối sẵn có trong pool, ứng dụng không cần phải liên tục tạo mới và đóng kết nối.
+    - Giảm thời gian phản hồi: Khi một kết nối đã sẵn sàng trong pool, ứng dụng có thể sử dụng nó ngay lập tức mà không cần đợi quá trình tạo kết nối mới.
+    - Quản lý tài nguyên tốt hơn: Giới hạn số lượng kết nối: Pool size cho phép giới hạn số lượng kết nối tối đa đến cơ sở dữ liệu, giúp ngăn ngừa tình trạng quá tải và cạn kiệt tài nguyên của cơ sở dữ liệu.
+    - Cân bằng tải: Giúp phân bổ tải đều đặn hơn khi có nhiều yêu cầu đồng thời.
+    - Tăng độ tin cậy:
+    - Phát hiện và tái tạo kết nối hỏng: Connection pool có thể kiểm tra và loại bỏ các kết nối bị hỏng hoặc không còn sử dụng, giúp duy trì tính ổn định của ứng dụng.
+ Điều 7: Nếu Users vượt quá số lượng PoolSize thì sao?
