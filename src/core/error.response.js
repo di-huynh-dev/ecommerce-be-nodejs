@@ -5,12 +5,15 @@ const { UNAUTHORIZED } = require("../utils/statusCodes");
 const StatusCode = {
   FORBIDDEN: 403,
   CONFLICT: 409,
-  UNAUTHORIZED: UNAUTHORIZED,
+  UNAUTHORIZED: 401,
+  NOT_FOUND: 404,
 };
 
 const ReasonsStatusCode = {
   FORBIDDEN: "Bad request error",
   CONFLICT: "Conflict request error",
+  UNAUTHORIZED: "Unauthorized error",
+  NOT_FOUND: "Not found error",
 };
 class ErrorResponse extends Error {
   constructor(message, status) {
@@ -45,4 +48,18 @@ class UnauthorizedError extends ErrorResponse {
   }
 }
 
-module.exports = { BadRequestError, ConflictRequestError, UnauthorizedError };
+class NotFoundError extends ErrorResponse {
+  constructor(
+    message = ReasonsStatusCode.NOT_FOUND,
+    statusCode = StatusCode.NOT_FOUND
+  ) {
+    super(message, statusCode);
+  }
+}
+
+module.exports = {
+  BadRequestError,
+  ConflictRequestError,
+  UnauthorizedError,
+  NotFoundError,
+};
