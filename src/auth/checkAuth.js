@@ -39,4 +39,4 @@ const permission = (permission) => {
   };
 };
 
-module.exports = { apiKey, permission, asyncHandler };
+module.exports = { apiKey, permission };
