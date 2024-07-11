@@ -6,7 +6,11 @@ const crypto = require("crypto");
 const KeyTokenService = require("./keyToken.service");
 const { createTokenPair } = require("../auth/authUtils");
 const { getInfoData } = require("../utils");
-const { BadRequestError } = require("../core/error.response");
+const {
+  BadRequestError,
+  UnauthorizedError,
+} = require("../core/error.response");
+const { findByEmail } = require("./shop.service");
 
 const RoleShop = {
   SHOP: "SHOP",
@@ -16,8 +20,45 @@ const RoleShop = {
 };
 
 class AccessService {
+  static login = async ({ email, password, refreshToken = null }) => {
+    //Check email exists
+    const foundShop = await findByEmail(email);
+    if (!foundShop) {
+      throw new BadRequestError("Error: Shop not registered");
+    }
+
+    const match = await bcrypt.compare(password, foundShop.password);
+    if (!match) {
+      throw new UnauthorizedError("Error: Wrong password");
+    }
+
+    const privateKey = crypto.randomBytes(64).toString("hex");
+    const publicKey = crypto.randomBytes(64).toString("hex");
+
+    const { _id: userId } = foundShop;
+    const tokens = await createTokenPair(
+      { userId, email },
+      publicKey,
+      privateKey
+    );
+
+    await KeyTokenService.createToken({
+      refreshToken: tokens.refreshToken,
+      privateKey,
+      publicKey,
+      userId,
+    });
+
+    return {
+      shop: getInfoData({
+        fields: ["_id", "name", "email"],
+        object: foundShop,
+      }),
+      tokens,
+    };
+  };
+
   static signup = async ({ name, email, password }) => {
-    // try {
     // step 1: check email  exists
     const holderShop = await shopModel.findOne({ email }).lean();
     if (holderShop) {
@@ -58,7 +99,6 @@ class AccessService {
         publicKey,
         privateKey
       );
-      console.log("Created Token Success", tokens);
 
       return {
         code: 201,
@@ -79,13 +119,6 @@ class AccessService {
       message: "Create Shop Error",
       metadata: null,
     };
-    // } catch (error) {
-    //   return {
-    //     code: "xxx",
-    //     message: error.message,
-    //     status: "error",
-    //   };
-    // }
   };
 }
 

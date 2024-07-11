@@ -7,5 +7,6 @@ const router = exppress.Router();
 
 //Sign up
 router.post("/shop/signup", asyncHandler(accessController.signup));
+router.post("/shop/login", asyncHandler(accessController.login));
 
 module.exports = router;
