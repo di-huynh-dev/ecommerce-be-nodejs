@@ -62,6 +62,7 @@ const authentication = asyncHandler(async (req, res, next) => {
     }
 
     req.keyStore = keyStore;
+    req.user = decodedUser;
 
     // OK- return next()
     return next();

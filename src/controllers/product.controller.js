@@ -1,22 +1,17 @@
 "use strict";
 
-const { SuccessResponse } = require("../core/success.response");
+const { OK } = require("../core/success.response");
 const ProductFactory = require("../services/product.service");
 
 class ProductController {
   createProduct = async (req, res, next) => {
-    try {
-      const product = await ProductFactory.createProduct(
-        req.body.product_type,
-        req.body
-      );
-      new SuccessResponse({
-        message: "Create new product successfully!",
-        metadata: product,
-      }).send(res);
-    } catch (error) {
-      next(error);
-    }
+    new OK({
+      message: "Create new product successfully!",
+      metadata: await ProductFactory.createProduct(req.body.product_type, {
+        ...req.body,
+        product_shop: req.user.userId,
+      }),
+    }).send(res);
   };
 }
 

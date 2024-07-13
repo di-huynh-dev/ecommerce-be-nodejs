@@ -17,18 +17,21 @@ class SuccessResponse {
     reasonStatusCode = ReasonsStatusCode.OK,
     metadata = {}
   ) {
-    this.message = !message ? reasonStatusCode : message;
+    this.message = message || reasonStatusCode;
     this.statusCode = statusCode;
     this.metadata = metadata;
   }
   send(res, headers = {}) {
-    return res.status(this.statusCode).json(this);
+    return res.status(this.statusCode).json({
+      message: this.message,
+      metadata: this.metadata,
+    });
   }
 }
 
 class OK extends SuccessResponse {
   constructor({ message, metadata }) {
-    super({ message, metadata });
+    super(message, StatusCode.OK, ReasonsStatusCode.OK, metadata);
   }
 }
 
@@ -40,7 +43,7 @@ class CREATED extends SuccessResponse {
     reasonStatusCode = ReasonsStatusCode.CREATED,
     metadata,
   }) {
-    super({ message, statusCode, reasonStatusCode, metadata });
+    super(message, statusCode, reasonStatusCode, metadata);
     this.options = options;
   }
 }
