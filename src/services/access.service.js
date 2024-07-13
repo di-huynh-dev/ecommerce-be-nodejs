@@ -21,6 +21,42 @@ const RoleShop = {
 };
 
 class AccessService {
+  static handleRefreshTokenV2 = async ({ refreshToken, user, keyStore }) => {
+    const { userId, email } = user;
+
+    if (keyStore.refreshTokensUsed.includes(refreshToken)) {
+      //Co dau hieu nghi van
+      await KeyTokenService.deleteKeyByUserId(userId);
+      throw new ForbiddenError("Something is wrong! Please login again");
+    }
+
+    if (keyStore.refreshToken !== refreshToken)
+      throw new UnauthorizedError("Shop not registered");
+
+    const foundShop = await findByEmail(email);
+    if (!foundShop) throw new UnauthorizedError("Shop not registered");
+
+    const tokens = await createTokenPair(
+      { userId, email },
+      keyStore.publicKey,
+      keyStore.privateKey
+    );
+
+    //update token
+    await keyStore.updateOne({
+      $set: {
+        refreshToken: tokens.refreshToken,
+      },
+      $addToSet: {
+        refreshTokensUsed: refreshToken, //Da duoc su dung de lay token moi roi
+      },
+    });
+
+    return {
+      user,
+      tokens,
+    };
+  };
   static handleRefreshToken = async (refreshToken) => {
     const foundToken = await KeyTokenService.findByRefreshTokenUsed(
       refreshToken
