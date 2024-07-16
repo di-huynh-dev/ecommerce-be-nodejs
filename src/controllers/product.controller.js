@@ -21,6 +21,26 @@ class ProductController {
     }).send(res);
   };
 
+  publishProduct = async (req, res, next) => {
+    new OK({
+      message: "Publish product successfully!",
+      metadata: await ProductServiceV2.publicProductByShop({
+        product_shop: req.user.userId,
+        product_id: req.params.id,
+      }),
+    }).send(res);
+  };
+
+  unPublishProduct = async (req, res, next) => {
+    new OK({
+      message: "Unpublish product successfully!",
+      metadata: await ProductServiceV2.unPublicProductByShop({
+        product_shop: req.user.userId,
+        product_id: req.params.id,
+      }),
+    }).send(res);
+  };
+
   // Query
   /**
    * @desc Get list of draft products of a shop
@@ -32,6 +52,15 @@ class ProductController {
     new OK({
       message: "Get all draft products successfully!",
       metadata: await ProductServiceV2.findAllDraftsForShop({
+        product_shop: req.user.userId,
+      }),
+    }).send(res);
+  };
+
+  getAllPublicsForShop = async (req, res, next) => {
+    new OK({
+      message: "Get all public products successfully!",
+      metadata: await ProductServiceV2.findAllPublicsForShop({
         product_shop: req.user.userId,
       }),
     }).send(res);

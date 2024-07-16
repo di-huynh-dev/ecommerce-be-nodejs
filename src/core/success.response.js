@@ -24,14 +24,15 @@ class SuccessResponse {
   send(res, headers = {}) {
     return res.status(this.statusCode).json({
       message: this.message,
+      statusCode: this.statusCode,
       metadata: this.metadata,
     });
   }
 }
 
 class OK extends SuccessResponse {
-  constructor({ message, metadata }) {
-    super(message, StatusCode.OK, ReasonsStatusCode.OK, metadata);
+  constructor({ message, statusCode = StatusCode.OK, metadata }) {
+    super(message, statusCode, ReasonsStatusCode.OK, metadata);
   }
 }
 
