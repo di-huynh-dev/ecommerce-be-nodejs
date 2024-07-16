@@ -6,6 +6,10 @@ const productController = require("../../controllers/product.controller");
 const { authentication } = require("../../auth/authUtils");
 const router = exppress.Router();
 
+router.get(
+  "/search/:keySearch",
+  asyncHandler(productController.getListSearchProduct)
+);
 // Authentication
 router.use(authentication);
 
