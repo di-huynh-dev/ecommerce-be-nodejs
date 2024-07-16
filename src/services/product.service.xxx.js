@@ -7,6 +7,7 @@ const {
   electronic,
   furniture,
 } = require("../models/product.model");
+const { findAllDraftsForShop } = require("../models/repositories/product.repo");
 
 // Define factory class to create product
 
@@ -21,6 +22,12 @@ class ProductFactory {
     const productClass = ProductFactory.productRegistry[type];
     if (!productClass) throw new BadRequestError("Invalid product type");
     return new productClass(payload).createProduct();
+  }
+
+  //Get list of draft products
+  static async findAllDraftsForShop({ product_shop, limit = 50, skip = 0 }) {
+    const query = { product_shop, isDraft: true };
+    return await findAllDraftsForShop({ query, limit, skip });
   }
 }
 
