@@ -23,5 +23,32 @@ const unGetSelectData = (select = []) => {
     })
   );
 };
+const removeUndefindObject = (object) => {
+  Object.keys(object).forEach((key) => {
+    if (object[key] === null) delete object[key];
+  });
 
-module.exports = { getInfoData, getSelectData, unGetSelectData };
+  return object;
+};
+const updateNestedObjectParser = (object) => {
+  const final = {};
+  Object.keys(object).forEach((key) => {
+    if (typeof object[key] === "Object" && !Array.isArray(object[key])) {
+      const response = updateNestedObjectParser(object[key]);
+      Object.keys(response).forEach((k) => {
+        final[`${key}.${k}`] = response[k];
+      });
+    } else {
+      final[key] = object[key];
+    }
+  });
+  return object;
+};
+
+module.exports = {
+  getInfoData,
+  getSelectData,
+  unGetSelectData,
+  updateNestedObjectParser,
+  removeUndefindObject,
+};
