@@ -1,49 +1,55 @@
-"use strict";
+'use strict'
 
-const _ = require("lodash");
+const _ = require('lodash')
+
+const { Types } = require('mongoose')
+
+const convertToObjectId = (id) => {
+  return new Types.ObjectId(id)
+}
 
 const getInfoData = ({ fields = [], object = {} }) => {
-  return _.pick(object, fields);
-};
+  return _.pick(object, fields)
+}
 
 // ["email", "password", "status", "roles"] => { email: 1, password: 1, status: 1, roles: 1 }
 const getSelectData = (select = []) => {
   return Object.fromEntries(
     select.map((item) => {
-      return [item, 1];
-    })
-  );
-};
+      return [item, 1]
+    }),
+  )
+}
 
 // ["email", "password", "status", "roles"] => { email: 0, password: 0, status: 0, roles: 0 }
 const unGetSelectData = (select = []) => {
   return Object.fromEntries(
     select.map((item) => {
-      return [item, 0];
-    })
-  );
-};
+      return [item, 0]
+    }),
+  )
+}
 const removeUndefindObject = (object) => {
   Object.keys(object).forEach((key) => {
-    if (object[key] === null) delete object[key];
-  });
+    if (object[key] === null) delete object[key]
+  })
 
-  return object;
-};
+  return object
+}
 const updateNestedObjectParser = (object) => {
-  const final = {};
+  const final = {}
   Object.keys(object).forEach((key) => {
-    if (typeof object[key] === "Object" && !Array.isArray(object[key])) {
-      const response = updateNestedObjectParser(object[key]);
+    if (typeof object[key] === 'Object' && !Array.isArray(object[key])) {
+      const response = updateNestedObjectParser(object[key])
       Object.keys(response).forEach((k) => {
-        final[`${key}.${k}`] = response[k];
-      });
+        final[`${key}.${k}`] = response[k]
+      })
     } else {
-      final[key] = object[key];
+      final[key] = object[key]
     }
-  });
-  return object;
-};
+  })
+  return object
+}
 
 module.exports = {
   getInfoData,
@@ -51,4 +57,5 @@ module.exports = {
   unGetSelectData,
   updateNestedObjectParser,
   removeUndefindObject,
-};
+  convertToObjectId,
+}

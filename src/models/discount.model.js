@@ -72,6 +72,10 @@ var discountSchema = new Schema(
       type: Array,
       default: [],
     },
+    discount_max_uses_per_user: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -80,5 +84,5 @@ var discountSchema = new Schema(
 )
 
 //Export the model
-const Inventory = model(DOCUMENT_NAME, discountSchema)
-module.exports = { inventory: Inventory }
+const Discount = model(DOCUMENT_NAME, discountSchema)
+module.exports = Discount
