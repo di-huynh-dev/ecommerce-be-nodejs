@@ -66,7 +66,7 @@ class ProductFactory {
       sort,
       page,
       filter,
-      select: ['product_name', 'product_price', 'product_description'],
+      select: ['product_name', 'product_price', 'product_description', 'product_shop'],
     })
   }
 
